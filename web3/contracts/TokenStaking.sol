@@ -163,4 +163,12 @@ contract TokenStaking is Ownable, ReentrancyGuard, Initializable {
   function getStakeStatus() external view returns (bool) {
     return _isStakingPause;
   }
+
+  /** 
+   * @notice This function is used to get the current APY Rate
+   * @return current APY Rate
+   */
+  function getAPY() external view returns (uint256) {
+    return _apyRate;
+  }
 }
