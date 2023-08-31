@@ -25,7 +25,7 @@ contract TokenStaking is Ownable, ReentrancyGuard, Initializable {
   uint256 _totalUsers; // Total users
   uint256 __stakeDays; // Stake days
   uint256 _earlyUnstakeFeePercentage; // Early unstake fee percentage
-  bool _isStakingPause; // Stake Status
+  bool _isStakingPaused; // Stake Status
 
   // Token contract address
   address private _tokenAddress;
@@ -161,7 +161,7 @@ contract TokenStaking is Ownable, ReentrancyGuard, Initializable {
    * @notice This function is used to get the stake status
    */
   function getStakeStatus() external view returns (bool) {
-    return _isStakingPause;
+    return _isStakingPaused;
   }
 
   /** 
@@ -247,5 +247,13 @@ contract TokenStaking is Ownable, ReentrancyGuard, Initializable {
    */
   function stakeFor(uint256 amount, address user) external onlyOwner {
     _stakeTokens(amount, user);
+  }
+
+  /**
+   * @notice enable/disable staking
+   * @dev This function can be to toggle staking status
+   */
+  function toggleStakingStatus() external onlyOwner {
+    _isStakingPaused = !_isStakingPaused;
   }
 }
