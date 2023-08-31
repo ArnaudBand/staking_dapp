@@ -25,7 +25,7 @@ contract TokenStaking is Ownable, ReentrancyGuard, Initializable {
   uint256 _totalUsers; // Total users
   uint256 __stakeDays; // Stake days
   uint256 _earlyUnstakeFeePercentage; // Early unstake fee percentage
-  bool _isStakePause; // Is stake active
+  bool _isStakingPause; // Stake Status
 
   // Token contract address
   address private _tokenAddress;
@@ -155,5 +155,12 @@ contract TokenStaking is Ownable, ReentrancyGuard, Initializable {
    */
   function getEarlyUnstakeFeePercentage() external view returns (uint256) {
     return _earlyUnstakeFeePercentage;
+  }
+
+  /** 
+   * @notice This function is used to get the stake status
+   */
+  function getStakeStatus() external view returns (bool) {
+    return _isStakingPause;
   }
 }
