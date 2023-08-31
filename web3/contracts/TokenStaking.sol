@@ -205,4 +205,15 @@ contract TokenStaking is Ownable, ReentrancyGuard, Initializable {
   function isStakeHolder(address _user) external view returns (bool) {
     return _users[_user].stakeAmount != 0;
   }
+
+  /* View Methods End */
+
+  /* Owner Methods start */
+
+  /**
+   * @notice This function is used to update minimum staking amount
+   */
+  function updateMinimumStakingAmount(uint256 newAmount) external onlyOwner {
+    _minimumStakingAmount = newAmount;
+  }
 }
