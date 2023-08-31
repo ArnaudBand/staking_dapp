@@ -122,4 +122,10 @@ contract TokenStaking is Ownable, ReentrancyGuard, Initializable {
     return _stakeStartDate;
   }
 
+  /** 
+   * @notice This function is used to get the stake end date
+   */
+  function getStakeEndDate() external view returns (uint256) {
+    return _stakeEndDate;
+  }
 }
