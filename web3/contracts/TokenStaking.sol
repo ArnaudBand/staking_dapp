@@ -187,4 +187,22 @@ contract TokenStaking is Ownable, ReentrancyGuard, Initializable {
   function getWithdrawableAmount() external view returns (uint256) {
     return IERC20(_tokenAddress).balanceOf(address(this)) - _totalStakedTokens;
   }
+
+  /** 
+   * @notice This function is used to get user's details
+   * @param userAddress User's address to get details of
+   * @return User struct
+   */
+  function getUser(address userAddress) external view returns (User memory) {
+    return _users[userAddress];
+  }
+
+  /** 
+   * @notice This function is used to check if a user is a stakeholder
+   * @param _user Address of the user to check
+   * @return True if user is a stakeholder, false otherwise
+   */
+  function isStakeHolder(address _user) external view returns (bool) {
+    return _users[_user].stakeAmount != 0;
+  }
 }
