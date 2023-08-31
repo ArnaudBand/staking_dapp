@@ -42,4 +42,11 @@ contract TokenStaking is Ownable, ReentrancyGuard, Initializable {
   event Unstake(address indexed user, uint256 amount);
   event EarlyUnStakeFee(address indexed user, uint256 amount);
   event ClaimReward(address indexed user, uint256 amount);
+
+  // MODIFIERS
+   modifier whenTreasuryHasBakance(uin256 amount) {
+    require(IERC20(_tokenAddress).balanceOf(address(this)) >= amount, "Treasury has no balance");
+    _;
+  }
+
 }
