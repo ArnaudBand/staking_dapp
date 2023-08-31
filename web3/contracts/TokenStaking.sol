@@ -229,4 +229,12 @@ contract TokenStaking is Ownable, ReentrancyGuard, Initializable {
    */
   function updateStakeEndDate(uint256 newDate) external onlyOwner {
     _stakeEndDate = newDate;
+  }
+
+  /**
+   * @notice This function is used to update early unstake fee percentage
+   */
+  function updateEarlyUnstakeFeePercentage(uint256 newPercentage) external onlyOwner {
+    _earlyUnstakeFeePercentage = newPercentage;
+  }
 }
