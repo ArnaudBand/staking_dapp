@@ -171,4 +171,13 @@ contract TokenStaking is Ownable, ReentrancyGuard, Initializable {
   function getAPY() external view returns (uint256) {
     return _apyRate;
   }
+
+  /** 
+   * @notice This function is used to get msg.sender's estimated reward amount
+   * @return msg.sender's estimated reward amount
+   */
+  function getEstimatedRewards() external view returns (uint256) {
+    (uint256 amount, ) = _getEstimatedRewards(msg.sender);
+    return _users[msg.sender].rewardAmount + amount;
+  }
 }
