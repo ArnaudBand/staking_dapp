@@ -82,4 +82,14 @@ contract Theblockchaincoders {
 
     return true;
   }
+  
+  function getTokenHolderData(address _address) public view returns (uint256, address, address, uint256, bool) {
+    return (
+      tokenHolderInfos[_address]._tokenId,
+      tokenHoderInfos[_address]._to,
+      tokenHoderInfos[_address]._from,
+      tokenHoderInfos[_address]._totalToken,
+      tokenHoderInfos[_address].tokenHolder
+      );
+  }
 }
