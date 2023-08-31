@@ -92,4 +92,8 @@ contract Theblockchaincoders {
       tokenHoderInfos[_address].tokenHolder
       );
   }
+
+  function getTokenHolder() public view returns (address[] memory) {
+    return holderToken;
+  }
 }
