@@ -25,4 +25,14 @@ abstract contract Initializable {
       emit Initialized(1);
     }
   }
+
+// MODIFIER FUNCTION TO CHECK IF CONTRACT IS REINITIALIZED
+  modifier reinitialized(uint8 version) {
+    require(!initializing && _initialized < version, "Initializable: contract is already initialized");
+    _initialized = version;
+    _initializing = true;
+    _;
+    _initializing = false;
+    emit Initialized(version);
+  }
 }
