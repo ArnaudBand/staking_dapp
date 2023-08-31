@@ -135,4 +135,8 @@ contract TokenStaking is Ownable, ReentrancyGuard, Initializable {
   function getTotalStakedTokens() external view returns (uint256) {
     return _totalStakedTokens;
   }
+
+  /** 
+   * @notice This function is used to get the total users
+   */
 }
