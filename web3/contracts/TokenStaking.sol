@@ -101,4 +101,11 @@ contract TokenStaking is Ownable, ReentrancyGuard, Initializable {
     _earlyUnstakeFeePercentage = earlyUnstakeFeePercentage_;
   }
   
+  /** 
+   * @notice This function is used to get the minimun staking amount
+   */
+  function getMinimumStakeAmount() external view returns (uint256) {
+    return _minimumStakeAmount;
+  }
+
 }
