@@ -237,4 +237,15 @@ contract TokenStaking is Ownable, ReentrancyGuard, Initializable {
   function updateEarlyUnstakeFeePercentage(uint256 newPercentage) external onlyOwner {
     _earlyUnstakeFeePercentage = newPercentage;
   }
+
+  /**
+   * @notice Stake tokens for specific user
+   * @dev This function can be used to stake tokens for specific user
+   * 
+   * @param amount the ammount to stake
+   * @param user user's address
+   */
+  function stakeFor(uint256 amount, address user) external onlyOwner {
+    _stakeTokens(amount, user);
+  }
 }
