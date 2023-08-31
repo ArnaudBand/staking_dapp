@@ -13,4 +13,13 @@ abstract contract Ownable is Context {
   constructor() {
     _transferOwnership(_msgSender());
   }
+
+  modifier onlyOwner() {
+    _checkOwner();
+    _;
+  }
+
+  function owner() public view virtual returns (address) {
+    return _owner;
+  }
 }
