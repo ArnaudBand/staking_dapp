@@ -216,4 +216,11 @@ contract TokenStaking is Ownable, ReentrancyGuard, Initializable {
   function updateMinimumStakingAmount(uint256 newAmount) external onlyOwner {
     _minimumStakingAmount = newAmount;
   }
+
+  /**
+   * @notice This function is used to update maximum staking amount
+   */
+  function updateMaximumStakingAmount(uint256 newAmount) external onlyOwner {
+    _maximumStakingAmount = newAmount;
+  }
 }
