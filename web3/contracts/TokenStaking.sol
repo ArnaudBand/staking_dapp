@@ -49,4 +49,56 @@ contract TokenStaking is Ownable, ReentrancyGuard, Initializable {
     _;
   }
 
+
+  function initialize(
+    address owner_,
+    address tokenAddress_,
+    uint256 apyRate_,
+    uint256 minimumStakeAmount_,
+    uint256 maxStakeTokenLimit_,
+    uint256 stakeStartDate_,
+    uint256 stakeEndDate_,
+    uint256 stakeDays_,
+    uint256 earlyUnstakeFeePercentage_
+  ) public virtual initializer {
+    __TokenStaking_init_unchained(
+      owner_,
+      tokenAddress_,
+      apyRate_,
+      minimumStakeAmount_,
+      maxStakeTokenLimit_,
+      stakeStartDate_,
+      stakeEndDate_,
+      stakeDays_,
+      earlyUnstakeFeePercentage_
+    );
+  }
+
+  function __TokenStaking_init_unchained(
+    address owner_,
+    address tokenAddress_,
+    uint256 apyRate_,
+    uint256 minimumStakeAmount_,
+    uint256 maxStakeTokenLimit_,
+    uint256 stakeStartDate_,
+    uint256 stakeEndDate_,
+    uint256 stakeDays_,
+    uint256 earlyUnstakeFeePercentage_
+  ) internal onlyInitializing {
+    require(apyRate_ <= 10000, "TokenStaking: APY rate should be less than 10000");
+    require(stakeDays_ > 0, "TokenStaking: Stake days should be greater than 0");
+    require(tokenAddress_ != address(0), "TokenStaking: Token address should not be 0");
+    require(stakeStartDate_ < stakeEndDate_, "TokenStaking: Stake start date should be less than stake end date");
+
+    _transferOwnership(owner_);
+    _tokenAddress = tokenAddress_;
+    _apyRate = apyRate_;
+    _minimumStakeAmount = minimumStakeAmount_;
+    _maxStakeTokenLimit = maxStakeTokenLimit_;
+    _stakeStartDate = stakeStartDate_;
+    _stakeEndDate = stakeEndDate_;
+    __stakeDays = stakeDays_;
+    _earlyUnstakeFeePercentage = earlyUnstakeFeePercentage_;
+  }
+  
 }
