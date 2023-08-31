@@ -180,4 +180,11 @@ contract TokenStaking is Ownable, ReentrancyGuard, Initializable {
     (uint256 amount, ) = _getEstimatedRewards(msg.sender);
     return _users[msg.sender].rewardAmount + amount;
   }
+
+  /** 
+   * @notice This function is used to get withdrawable amount from contract
+   */
+  function getWithdrawableAmount() external view returns (uint256) {
+    return IERC20(_tokenAddress).balanceOf(address(this)) - _totalStakedTokens;
+  }
 }
