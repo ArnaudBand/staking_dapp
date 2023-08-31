@@ -149,4 +149,11 @@ contract TokenStaking is Ownable, ReentrancyGuard, Initializable {
   function getStakeDays() external view returns (uint256) {
     return __stakeDays;
   }
+
+  /** 
+   * @notice This function is used to get the early unstake fee percentage
+   */
+  function getEarlyUnstakeFeePercentage() external view returns (uint256) {
+    return _earlyUnstakeFeePercentage;
+  }
 }
