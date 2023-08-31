@@ -108,4 +108,11 @@ contract TokenStaking is Ownable, ReentrancyGuard, Initializable {
     return _minimumStakeAmount;
   }
 
+  /** 
+   * @notice This function is used to get the maximum staking amount
+   */
+  function getMaxStakeTokenLimit() external view returns (uint256) {
+    return _maxStakeTokenLimit;
+  }
+
 }
