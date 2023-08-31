@@ -1,7 +1,8 @@
 require("@nomicfoundation/hardhat-toolbox");
+require("dotenv").config();
 
 /** @type import('hardhat/config').HardhatUserConfig */
-const PRIVATE_KEY = "YOUR ADDRESS";
+const PRIVATE_KEY = process.env.PRIVATE_KEY;
 const RPC_URL = "https://rpc.ankr.com/polygon_mumbai";
 module.exports = {
   defaultNetwork: "polygon_mumbai",
