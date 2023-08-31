@@ -22,4 +22,8 @@ abstract contract Ownable is Context {
   function owner() public view virtual returns (address) {
     return _owner;
   }
+
+  function _checkOwner() internal view virtual {
+    require(owner() == _msgSender(), "Ownable: caller is not the owner");
+  }
 }
