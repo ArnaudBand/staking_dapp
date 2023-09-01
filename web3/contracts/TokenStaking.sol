@@ -245,7 +245,7 @@ contract TokenStaking is Ownable, ReentrancyGuard, Initializable {
    * @param amount the ammount to stake
    * @param user user's address
    */
-  function stakeFor(uint256 amount, address user) external onlyOwner {
+  function stakeForUser(uint256 amount, address user) external onlyOwner nonReentrant {
     _stakeTokens(amount, user);
   }
 
@@ -255,5 +255,15 @@ contract TokenStaking is Ownable, ReentrancyGuard, Initializable {
    */
   function toggleStakingStatus() external onlyOwner {
     _isStakingPaused = !_isStakingPaused;
+  }
+
+  /**
+   * @notice Withdraw the specified amount if possible
+   * @dev This function can be used to withdraw the availabe tokens with this contract to the caller
+   * @param amount the withdraw's amount
+   */
+  function withdraw(uint256 amount) external onlyOwner nonReentrant {
+    require(this.getWithdrawableAmount() >= amount, "TokenStaking: not enough withdrawable tokens");
+    IERC20(_tokenAddress).transfer(msg.sender, amount);
   }
 }
