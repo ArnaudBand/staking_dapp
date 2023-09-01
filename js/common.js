@@ -90,3 +90,22 @@ function logout() {
   localStorage.clear();
   window.location.reload();
 }
+
+function addDecimal(number, decimal) {
+  // Convert the number to a string and split it into two parts using the decimal point
+  const numberParts = `${number}`.split(".");
+
+  // Check if there is a decimal part (i.e., if the number contains a decimal point)
+  if (numberParts[1]) {
+    // If the decimal part has more digits than the desired decimal places, truncate it
+    if (numberParts[1].length > decimal) {
+      numberParts[1] = numberParts[1].slice(0, decimal);
+    }
+
+    // Concatenate the integer part, truncated decimal part, and additional zeros to achieve the desired decimal places
+    return numberParts[0] + numberParts[1] + "0".repeat(decimal - numberParts[1].length);
+  } else {
+    // If there is no decimal part, add zeros to achieve the desired decimal places
+    return numberParts[0] + "0".repeat(decimal);
+  }
+}
