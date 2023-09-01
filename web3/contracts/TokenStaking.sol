@@ -13,7 +13,7 @@ contract TokenStaking is Ownable, ReentrancyGuard, Initializable {
     uint256 stakedAmount; // Stake Amount
     uint256 rewardAmount; // Reward amount
     uint256 lastStakeTime; // Last stake timestamp
-    uint256 lastRewardCaluculationTime; // Last reward calculation time
+    uint256 lastRewardCalculationTime; // Last reward calculation time
     uint256 rewardsClaimedSoFar; // Total reward claimed so far
   }
 
@@ -363,6 +363,26 @@ contract TokenStaking is Ownable, ReentrancyGuard, Initializable {
   function _calculaterewards(address _user) private {
     (uint256 userReward, uint256 currentTime) = _getUserEstimatedRewards(_user);
     _users[_user].rewardAmount += userReward;
-    _users[_user].lastRewardCaluculationTime = currentTime;
+    _users[_user].lastRewardCalculationTime = currentTime;
+  }
+
+  /**
+   * @notice This function is used to get estimated rewards for user
+   * @param _user Address of the user
+   * @return estimated rewards for the user
+   */
+  function _getUserEstimatedRewards(address _user) private view returns (uint256, uint256) {
+    uint256 userReward;
+    uint256 userTimestamp = _users[_user].lastRewardCalculationTime;
+
+    uint256 currentTimw = getCurrentTime();
+
+    if(currentTime > _users[_user].lastStakeTime + _stakeDays) {
+      currentTime = _users[user].lastStakeTime + _stakeDays;
+    }
+
+    uint256 totalStakedTime = currentTime - userTimestamp;
+    userReward += ((totalStakedTime * _users[_user].stakedAmount * _apyRate) / 365 days) / PERCENTAGE_DENOMINATOR;
+    return (userReward, currentTime);
   }
 }
