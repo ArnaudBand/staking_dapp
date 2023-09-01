@@ -140,3 +140,7 @@ function getSelectedTab(sClass) {
   console.log("getSelectedTab", sClass);
   return sClass || contractCall;
 }
+
+function getContractObj(sClass) {
+  return new Web3.eth.Contract(SELECT_CONTRACT[_NETWORK_ID][sClass].abi, SELECT_CONTRACT[_NETWORK_ID][sClass].address);
+}
