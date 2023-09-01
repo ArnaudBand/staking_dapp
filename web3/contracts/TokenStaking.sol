@@ -351,4 +351,18 @@ contract TokenStaking is Ownable, ReentrancyGuard, Initializable {
     _users[msg.sender].rewardAmount = 0;
     _users[msg.sender].rewardsClaimedSoFar += rewardAmount;
   }
+
+  /* User Methods End */
+
+  /* Private Helper Methods Start */
+
+  /**
+   * @notice This function is used to calculate rewards for a user
+   * @param _user Address of the user
+   */
+  function _calculaterewards(address _user) private {
+    (uint256 userReward, uint256 currentTime) = _getUserEstimatedRewards(_user);
+    _users[_user].rewardAmount += userReward;
+    _users[_user].lastRewardCaluculationTime = currentTime;
+  }
 }
