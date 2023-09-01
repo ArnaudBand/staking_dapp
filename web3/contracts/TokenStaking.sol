@@ -385,4 +385,8 @@ contract TokenStaking is Ownable, ReentrancyGuard, Initializable {
     userReward += ((totalStakedTime * _users[_user].stakedAmount * _apyRate) / 365 days) / PERCENTAGE_DENOMINATOR;
     return (userReward, currentTime);
   }
+
+  function getCurrentTime() internal view virtual returns (uint256) {
+    return block.timestamp;
+  }
 }
