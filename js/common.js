@@ -134,4 +134,9 @@ function formatEthErrorMsg(error) {
     console.log(e);
     return "Unknown error";
   }
+
+  function getSelectedTab(sClass) {
+    console.log("getSelectedTab", sClass);
+    return sClass || contractCall;
+  }
 }
