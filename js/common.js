@@ -84,5 +84,9 @@ function setWeb3Events(_provider) {
     localStorage.clear();
     logout();
   });
+}
 
+function logout() {
+  localStorage.clear();
+  window.location.reload();
 }
