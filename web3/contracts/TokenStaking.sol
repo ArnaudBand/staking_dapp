@@ -11,10 +11,10 @@ import "./IERC20.sol";
 contract TokenStaking is Ownable, ReentrancyGuard, Initializable {
   struct User {
     uint256 stakedAmount; // Stake Amount
-    uint256 rewardDebt; // Reward amount
+    uint256 rewardAmount; // Reward amount
     uint256 lastStakeTime; // Last stake timestamp
     uint256 lastRewardCaluculationTime; // Last reward calculation time
-    uint256 rewardClaimsoFar; // Total reward claimed so far
+    uint256 rewardsClaimedSoFar; // Total reward claimed so far
   }
 
   uint256 _minimumStakeAmount; // Minimum stake amount
@@ -288,14 +288,14 @@ contract TokenStaking is Ownable, ReentrancyGuard, Initializable {
     require(_amount > 0, "TokenStaking: Amount should be greater than 0");
     require(_amount >= _minimumStakingAmount, "TokenStaking: Amount should be greater than minimum staking amount");
 
-    if(_users[user_].stakeAmount != 0) {
+    if(_users[user_].stakedAmount != 0) {
       _calculateRewards(user_);
     } else {
       _users[user_].lastRewardCalculationTime = currentTime;
       _totalUsers += 1;
     }
 
-    _users[user_].stakeAmount += _amount;
+    _users[user_].stakedAmount += _amount;
     _users[user_].lastStakeTime = currentTime;
 
     _totalStakedTokens += _amount;
@@ -314,7 +314,7 @@ contract TokenStaking is Ownable, ReentrancyGuard, Initializable {
     address user = msg.sender;
     require(_amount > 0, "TokenStaking: Amount should be greater than 0");
     require(this.isStakeHolder(user), "TokenStaking: not a stakeholder");
-    require(_users[user].stakeAmount >= _amount, "TokenStaking: Amount should be less than staked amount");
+    require(_users[user].stakedAmount >= _amount, "TokenStaking: Amount should be less than staked amount");
 
     // Calculate User's rewards
     _calculateRewards(user);
@@ -328,14 +328,27 @@ contract TokenStaking is Ownable, ReentrancyGuard, Initializable {
 
     uint256 amountToUnstake = _amount - feeEarlyUnstake;
 
-    _users[user].stakeAmount -= _amount;
+    _users[user].stakedAmount -= _amount;
     _totalStakedTokens -= _amount;
 
-    if(_users[user].stakeAmount == 0) {
+    if(_users[user].stakedAmount == 0) {
       // delete _users[user]
       _totalUsers -= 1;
     }
     require(IERC20(_tokenAddress).transfer(user, amountToUnstake), "TokenStaking: failed to transfer");
     emit UnStake(user, _amount);
+  }
+
+  /**
+   * @notice this function is used to claim rewards
+   */
+  function claimReward() external nonReentrant whenTreasusyHasBalance(_users[msg.sender].rewardAmount) {
+    _calculateRewards(msg.sender);
+    uint256 rewardAmount = _users[msg.sender].rewardAmount;
+
+    require(rewardAmount > 0, "TokenStaking: no reward to claim");
+    require(IERC20(_tokenAddress).transfer(msg.sender, rewardAmount), "TokenStaking: failed to transfer");
+    _users[msg.sender].rewardAmount = 0;
+    _users[msg.sender].rewardsClaimedSoFar += rewardAmount;
   }
 }
