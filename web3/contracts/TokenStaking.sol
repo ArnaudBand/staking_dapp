@@ -39,7 +39,7 @@ contract TokenStaking is Ownable, ReentrancyGuard, Initializable {
   mapping(address => User) private _users;
 
   event Stake(address indexed user, uint256 amount);
-  event Unstake(address indexed user, uint256 amount);
+  event UnStake(address indexed user, uint256 amount);
   event EarlyUnStakeFee(address indexed user, uint256 amount);
   event ClaimReward(address indexed user, uint256 amount);
 
@@ -304,5 +304,38 @@ contract TokenStaking is Ownable, ReentrancyGuard, Initializable {
       IERC20(_tokenAddress).transferFrom(msg.sender, address(this), _amount), "TokenStaking: failed to transfer"
     );
     emit Stake(user_, _amount);
+  }
+
+  /**
+   * @notice this function is used to unstake tokens
+   * @param _amount Amount of tokens to be unstaked
+   */
+  function unstake(uint256 _amount) external nonReentrant whenTreasuryHasBakance(_amount) {
+    address user = msg.sender;
+    require(_amount > 0, "TokenStaking: Amount should be greater than 0");
+    require(this.isStakeHolder(user), "TokenStaking: not a stakeholder");
+    require(_users[user].stakeAmount >= _amount, "TokenStaking: Amount should be less than staked amount");
+
+    // Calculate User's rewards
+    _calculateRewards(user);
+
+    uint256 feeEarlyUnstake;
+
+    if(getCurrentTime() <= _users[user].lastStakeTime + _stakeDays) {
+      feeEarlyUnstake = ((_amount + _earlyUnstakeFeePercentage) / PERCENTAGE_DENOMINATOR);
+      emit EarlyUnStakeFee(user, feeEarlyUnstake);
+    }
+
+    uint256 amountToUnstake = _amount - feeEarlyUnstake;
+
+    _users[user].stakeAmount -= _amount;
+    _totalStakedTokens -= _amount;
+
+    if(_users[user].stakeAmount == 0) {
+      // delete _users[user]
+      _totalUsers -= 1;
+    }
+    require(IERC20(_tokenAddress).transfer(user, amountTounstake), "TokenStaking: failed to transfer");
+    emit UnStake(user, _amount);
   }
 }
