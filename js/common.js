@@ -109,3 +109,29 @@ function addDecimal(number, decimal) {
     return numberParts[0] + "0".repeat(decimal);
   }
 }
+
+function formatEthErrorMsg(error) {
+  try {
+    var eFrom = error.message.indexOf("{");
+    var eTo = error.message.lastIndexOf("}");
+    var eM1 = error.message.indexOf("TokenStaking: ");
+    var eM2 = error.message.indexOf("ERc20: ");
+    var eM3 = error.message.indexOf("Internal JSON-RPC error.");
+
+    if(eFrom != -1 && eTo != -1 && (eM1 != -1 || eM2 != -1)) {
+      var eMsgTemp = JSON.parse(error.message.substr(eFrom, eTo));
+      var eMsg = eM3 != -1 ? eMsgTemp.message : eMsgTemp.originalError.message;
+
+      if(eM1 != -1) {
+        return eMsg.split("TokenStaking: ", "");
+      } else {
+        return eMsg.split("ERC20: ", "");
+      }
+    } else {
+      return error.message;
+    }
+  } catch (e) {
+    console.log(e);
+    return "Unknown error";
+  }
+}
