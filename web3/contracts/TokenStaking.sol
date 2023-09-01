@@ -335,7 +335,7 @@ contract TokenStaking is Ownable, ReentrancyGuard, Initializable {
       // delete _users[user]
       _totalUsers -= 1;
     }
-    require(IERC20(_tokenAddress).transfer(user, amountTounstake), "TokenStaking: failed to transfer");
+    require(IERC20(_tokenAddress).transfer(user, amountToUnstake), "TokenStaking: failed to transfer");
     emit UnStake(user, _amount);
   }
 }
