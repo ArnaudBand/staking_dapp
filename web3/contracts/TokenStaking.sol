@@ -266,4 +266,43 @@ contract TokenStaking is Ownable, ReentrancyGuard, Initializable {
     require(this.getWithdrawableAmount() >= amount, "TokenStaking: not enough withdrawable tokens");
     IERC20(_tokenAddress).transfer(msg.sender, amount);
   }
+
+  /* Owner Methods End */
+
+  /* User Methods Start */
+
+  /**
+   * @notice this function is used to stake tokens
+   * @param _amount Amount of tokens to be staked
+   */
+  function stakeTokens(uint256 _amount) external nonReentrant {
+    _stakeTokens(_amount, msg.sender);
+  }
+
+  function _stakingTokens(uint256 _amount, address user_) private {
+    require(!_isStakingPaused, "TokenStaking: Staking is paused");
+    uint256 currentTime = getCurrentTime();
+    require(currentTime > _stakeStartDate, "TokenStaking: Staking has not started yet");
+    require(currentTime < _stakeEndDate, "TokenStaking: Staking has ended");
+    require(_totalStakedTokens + _amount <= _maxStakeTokenLimit, "TokenStaking: Maximum staking limit reached");
+    require(_amount > 0, "TokenStaking: Amount should be greater than 0");
+    require(_amount >= _minimumStakingAmount, "TokenStaking: Amount should be greater than minimum staking amount");
+
+    if(_users[user_].stakeAmount != 0) {
+      _calculateRewards(user_);
+    } else {
+      _users[user_].lastRewardCalculationTime = currentTime;
+      _totalUsers += 1;
+    }
+
+    _users[user_].stakeAmount += _amount;
+    _users[user_].lastStakeTime = currentTime;
+
+    _totalStakedTokens += _amount;
+
+    require(
+      IERC20(_tokenAddress).transferFrom(msg.sender, address(this), _amount), "TokenStaking: failed to transfer"
+    );
+    emit Stake(user_, _amount);
+  }
 }
