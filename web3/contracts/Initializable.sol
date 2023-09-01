@@ -28,7 +28,7 @@ abstract contract Initializable {
 
 // MODIFIER FUNCTION TO CHECK IF CONTRACT IS REINITIALIZED
   modifier reinitialized(uint8 version) {
-    require(!initializing && _initialized < version, "Initializable: contract is already initialized");
+    require(!_initializing && _initialized < version, "Initializable: contract is already initialized");
     _initialized = version;
     _initializing = true;
     _;
@@ -43,7 +43,7 @@ abstract contract Initializable {
   }
 
   function _disableInitializers() internal virtual {
-    require(!initializing, "Initializable: contract is initializing");
+    require(!_initializing, "Initializable: contract is initializing");
     if(_initialized < type(uint8).max) {
       _initialized = type(uint8).max;
       emit Initialized(type(uint8).max);

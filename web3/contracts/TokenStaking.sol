@@ -23,7 +23,7 @@ contract TokenStaking is Ownable, ReentrancyGuard, Initializable {
   uint256 _stakeStartDate; // Stake start date
   uint256 _totalStakedTokens; // Total staked token
   uint256 _totalUsers; // Total users
-  uint256 __stakeDays; // Stake days
+  uint256 _stakeDays; // Stake days
   uint256 _earlyUnstakeFeePercentage; // Early unstake fee percentage
   bool _isStakingPaused; // Stake Status
 
@@ -44,7 +44,7 @@ contract TokenStaking is Ownable, ReentrancyGuard, Initializable {
   event ClaimReward(address indexed user, uint256 amount);
 
   // MODIFIERS
-   modifier whenTreasuryHasBakance(uin256 amount) {
+   modifier whenTreasuryHasBakance(uint256 amount) {
     require(IERC20(_tokenAddress).balanceOf(address(this)) >= amount, "Treasury has no balance");
     _;
   }
@@ -97,7 +97,7 @@ contract TokenStaking is Ownable, ReentrancyGuard, Initializable {
     _maxStakeTokenLimit = maxStakeTokenLimit_;
     _stakeStartDate = stakeStartDate_;
     _stakeEndDate = stakeEndDate_;
-    __stakeDays = stakeDays_;
+    _stakeDays = stakeDays_;
     _earlyUnstakeFeePercentage = earlyUnstakeFeePercentage_;
   }
   
@@ -147,7 +147,7 @@ contract TokenStaking is Ownable, ReentrancyGuard, Initializable {
    * @notice This function is used to get the stake days
    */
   function getStakeDays() external view returns (uint256) {
-    return __stakeDays;
+    return _stakeDays;
   }
 
   /** 
@@ -177,7 +177,7 @@ contract TokenStaking is Ownable, ReentrancyGuard, Initializable {
    * @return msg.sender's estimated reward amount
    */
   function getEstimatedRewards() external view returns (uint256) {
-    (uint256 amount, ) = _getEstimatedRewards(msg.sender);
+    (uint256 amount, ) = _getUserEstimatedRewards(msg.sender);
     return _users[msg.sender].rewardAmount + amount;
   }
 
@@ -203,7 +203,7 @@ contract TokenStaking is Ownable, ReentrancyGuard, Initializable {
    * @return True if user is a stakeholder, false otherwise
    */
   function isStakeHolder(address _user) external view returns (bool) {
-    return _users[_user].stakeAmount != 0;
+    return _users[_user].stakedAmount != 0;
   }
 
   /* View Methods End */
@@ -214,14 +214,14 @@ contract TokenStaking is Ownable, ReentrancyGuard, Initializable {
    * @notice This function is used to update minimum staking amount
    */
   function updateMinimumStakingAmount(uint256 newAmount) external onlyOwner {
-    _minimumStakingAmount = newAmount;
+    _minimumStakeAmount = newAmount;
   }
 
   /**
    * @notice This function is used to update maximum staking amount
    */
   function updateMaximumStakingAmount(uint256 newAmount) external onlyOwner {
-    _maximumStakingAmount = newAmount;
+    _maxStakeTokenLimit = newAmount;
   }
 
   /**
@@ -246,7 +246,7 @@ contract TokenStaking is Ownable, ReentrancyGuard, Initializable {
    * @param user user's address
    */
   function stakeForUser(uint256 amount, address user) external onlyOwner nonReentrant {
-    _stakeTokens(amount, user);
+    _stakingTokens(amount, user);
   }
 
   /**
@@ -276,7 +276,7 @@ contract TokenStaking is Ownable, ReentrancyGuard, Initializable {
    * @param _amount Amount of tokens to be staked
    */
   function stakeTokens(uint256 _amount) external nonReentrant {
-    _stakeTokens(_amount, msg.sender);
+    _stakingTokens(_amount, msg.sender);
   }
 
   function _stakingTokens(uint256 _amount, address user_) private {
@@ -286,7 +286,7 @@ contract TokenStaking is Ownable, ReentrancyGuard, Initializable {
     require(currentTime < _stakeEndDate, "TokenStaking: Staking has ended");
     require(_totalStakedTokens + _amount <= _maxStakeTokenLimit, "TokenStaking: Maximum staking limit reached");
     require(_amount > 0, "TokenStaking: Amount should be greater than 0");
-    require(_amount >= _minimumStakingAmount, "TokenStaking: Amount should be greater than minimum staking amount");
+    require(_amount >= _minimumStakeAmount, "TokenStaking: Amount should be greater than minimum staking amount");
 
     if(_users[user_].stakedAmount != 0) {
       _calculateRewards(user_);
@@ -342,7 +342,7 @@ contract TokenStaking is Ownable, ReentrancyGuard, Initializable {
   /**
    * @notice this function is used to claim rewards
    */
-  function claimReward() external nonReentrant whenTreasusyHasBalance(_users[msg.sender].rewardAmount) {
+  function claimReward() external nonReentrant whenTreasuryHasBakance(_users[msg.sender].rewardAmount) {
     _calculateRewards(msg.sender);
     uint256 rewardAmount = _users[msg.sender].rewardAmount;
 
@@ -360,7 +360,7 @@ contract TokenStaking is Ownable, ReentrancyGuard, Initializable {
    * @notice This function is used to calculate rewards for a user
    * @param _user Address of the user
    */
-  function _calculaterewards(address _user) private {
+  function _calculateRewards(address _user) private {
     (uint256 userReward, uint256 currentTime) = _getUserEstimatedRewards(_user);
     _users[_user].rewardAmount += userReward;
     _users[_user].lastRewardCalculationTime = currentTime;
@@ -375,10 +375,10 @@ contract TokenStaking is Ownable, ReentrancyGuard, Initializable {
     uint256 userReward;
     uint256 userTimestamp = _users[_user].lastRewardCalculationTime;
 
-    uint256 currentTimw = getCurrentTime();
+    uint256 currentTime = getCurrentTime();
 
     if(currentTime > _users[_user].lastStakeTime + _stakeDays) {
-      currentTime = _users[user].lastStakeTime + _stakeDays;
+      currentTime = _users[_user].lastStakeTime + _stakeDays;
     }
 
     uint256 totalStakedTime = currentTime - userTimestamp;

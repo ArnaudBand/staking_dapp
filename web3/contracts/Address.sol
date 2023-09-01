@@ -22,7 +22,7 @@ library Address {
 
   // FunctionCallWithValue executes low level call with value
   function functionCall(address target, bytes memory data, string memory errorMessage) internal returns (bytes memory) {
-    return _functionCallWithValue(target, data, 0, errorMessage);
+    return functionCallWithValue(target, data, 0, errorMessage);
   }
 
   function functionCallWithValue(address target, bytes memory data, uint256 value) internal returns (bytes memory) {
@@ -30,12 +30,12 @@ library Address {
   }
 
   // FunctionCallWithValue executes low level call with value
-  function functionCallWithValue(address target, bytes memeory data, uint256 value, string memory errorMessage) internal returns (bytes memory) {
+  function functionCallWithValue(address target, bytes memory data, uint256 value, string memory errorMessage) internal returns (bytes memory) {
     require(address(this).balance >= value, "Address: insufficient balance for call");
     require(isContract(target), "Address: call to non-contract");
 
     (bool success, bytes memory returndata) = target.call{ value: value }(data);
-    return _verifyCallResult(success, returndata, errorMessage);
+    return verifyCallResult(success, returndata, errorMessage);
   }
 
 
@@ -48,7 +48,7 @@ library Address {
     require(isContract(target), "Address: static call to non-contract");
 
     (bool success, bytes memory returndata) = target.staticcall(data);
-    return _verifyCallResult(success, returndata, errorMessage);
+    return verifyCallResult(success, returndata, errorMessage);
   }
 
   function functionDelegateCall(address target, bytes memory data) internal returns (bytes memory) {
@@ -60,7 +60,7 @@ library Address {
     require(isContract(target), "Address: delegate call to non-contract");
 
     (bool success, bytes memory returndata) = target.delegatecall(data);
-    return _verifyCallResult(success, returndata, errorMessage);
+    return verifyCallResult(success, returndata, errorMessage);
   }
 
   // _functionCallWithValue executes low level call with value

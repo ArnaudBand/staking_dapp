@@ -1,4 +1,4 @@
-// SPDX-License-Identifier: SEE LICENSE IN LICENSE
+// SPDX-License-Identifier: UNLICENSED
 pragma solidity ^0.8.9;
 
 contract Theblockchaincoders {
@@ -37,7 +37,7 @@ contract Theblockchaincoders {
     balanceOf[msg.sender] = initialSupply;
   }
 
-  function inc() internal {
+  function inc() internal returns (uint256) {
     return _userId++;
   }
 
@@ -86,10 +86,10 @@ contract Theblockchaincoders {
   function getTokenHolderData(address _address) public view returns (uint256, address, address, uint256, bool) {
     return (
       tokenHolderInfos[_address]._tokenId,
-      tokenHoderInfos[_address]._to,
-      tokenHoderInfos[_address]._from,
-      tokenHoderInfos[_address]._totalToken,
-      tokenHoderInfos[_address].tokenHolder
+      tokenHolderInfos[_address]._to,
+      tokenHolderInfos[_address]._from,
+      tokenHolderInfos[_address]._totalToken,
+      tokenHolderInfos[_address]._tokenHolder
       );
   }
 

@@ -10,7 +10,7 @@ module.exports = {
     hardhat: {
       chainId: 80001,
     },
-    polygon_mumbai: {
+    mumbai: {
       url: "https://rpc.ankr.com/polygon_mumbai",
       accounts: [`0x${PRIVATE_KEY}`],
     },
