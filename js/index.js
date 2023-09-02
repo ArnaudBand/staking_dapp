@@ -45,6 +45,34 @@ const loadInitialData = async (sClass) => {
     // ID ELEMENT DATA
     document.getElementById("total-locked-user-token").innerHTML = `${userDetailBal}`;
     document.getElementById("num-of-stackers-value").innerHTML = `${cApy}%`;
+
+    // CLASS ELEMENT DATA
+    let totalLockedTokens = await cObj.methods.getTotalStakedTokens().call();
+    let earlyUnstakeFee = await cObj.methods.getEarlyUnstakeFeePercentage().call();
+
+    // ELEMENT DATA
+    document.getElementById("total-locked-tokens-value").innerHTML = `${totalLockedTokens / 10 ** 18} ${SELECT_CONTRACT[_NETWORK_ID].TOKEN.symbol}`;
+    document.querySelectorAll(".early-unstake-fee-value").forEach((e) => {
+      e.innerHTML = `${earlyUnstakeFee / 100}%`;
+    });
+
+    let minStakeAmount = await cObj.methods.getMinimumStakeAmount().call();
+    // let maxStakeAmount = await cObj.methods.getMaximumStakeAmount().call();
+
+    let minA;
+    if(minStakeAmount) {
+      minA = `${minStakeAmount / 10 ** 18} ${SELECT_CONTRACT[_NETWORK_ID].TOKEN.symbol}`;
+    } else {
+      minA = "0";
+    }
+
+    document.querySelectorAll(".Minimum-Staking-Amount").forEach((e) => {
+      e.innerHTML = `${minA}`;
+    });
+
+    document.querySelectorAll(".Maximum-Staking-Amount").forEach((e) => {
+      e.innerHTML = `${(1000000).toLocaleString()} ${SELECT_CONTRACT[_NETWORK_ID].TOKEN.symbol}`;
+    });
   } catch (error) {
     
   }
