@@ -21,6 +21,24 @@ const loadInitialData = async (sClass) => {
       SELECT_CONTRACT[_NETWORK_ID].STAKING.abi,
       SELECT_CONTRACT[_NETWORK_ID].STAKING[sClass].address
     );
+
+    // ID ELEMENT DATA
+    let totalUsers = await cObj.methods.getTotalUsers().call();
+    let cApy = await cObj.methods.getAPY().call();
+
+    // User details
+    let userDetail = await cObj.methods.getUser(currentAddress).call();
+
+    const user = {
+      lastRewardCalculationTime: userDetail.lastRewardCalculationTime,
+      lastStakeTime: userDetail.lastStakeTime,
+      stakedAmount: userDetail.stakedAmount,
+      rewardAmount: userDetail.rewardAmount,
+      rewardsClaimedSoFar: userDetail.rewardsClaimedSoFar,
+      address: currentAddress,
+    };
+
+    localStorage.setItem("User", JSON.stringify(user));
   } catch (error) {
     
   }
