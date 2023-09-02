@@ -39,6 +39,12 @@ const loadInitialData = async (sClass) => {
     };
 
     localStorage.setItem("User", JSON.stringify(user));
+
+    let userDetailBal = userDetail.stakedAmount / 10 ** 18;
+
+    // ID ELEMENT DATA
+    document.getElementById("total-locked-user-token").innerHTML = `${userDetailBal}`;
+    document.getElementById("num-of-stackers-value").innerHTML = `${cApy}%`;
   } catch (error) {
     
   }
