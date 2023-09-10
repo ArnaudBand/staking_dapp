@@ -73,6 +73,25 @@ const loadInitialData = async (sClass) => {
     document.querySelectorAll(".Maximum-Staking-Amount").forEach((e) => {
       e.innerHTML = `${(1000000).toLocaleString()} ${SELECT_CONTRACT[_NETWORK_ID].TOKEN.symbol}`;
     });
+
+    let isStakingPaused = await cObj.methods.getStakeStatus().call();
+    let isStakingPausedTextl;
+
+    let startDate = await cObj.methods.getStakeStartDate().call();
+    startDate = Number(startDate) * 1000;
+
+    let endDate = await cObj.methods.getStakeEndDate().call();
+    endDate = Number(endDate) * 1000;
+
+    let stakeDays = await cObj.methods.getStakeDays().call();
+
+    let days = Math.floor(Number(stakeDays) / 86400);
+
+    let dayDisplay = days > 0 ? days + (days == 1 ? " day" : " days") : "";
+
+    document.querySelectorAll(".Lock-period-value").forEach((element) => {
+      element.innerHTML = `${dayDisplay}`;
+    })
   } catch (error) {
     
   }
