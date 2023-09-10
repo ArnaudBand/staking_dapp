@@ -75,7 +75,7 @@ const loadInitialData = async (sClass) => {
     });
 
     let isStakingPaused = await cObj.methods.getStakeStatus().call();
-    let isStakingPausedTextl;
+    let isStakingPausedText;
 
     let startDate = await cObj.methods.getStakeStartDate().call();
     startDate = Number(startDate) * 1000;
@@ -91,7 +91,39 @@ const loadInitialData = async (sClass) => {
 
     document.querySelectorAll(".Lock-period-value").forEach((element) => {
       element.innerHTML = `${dayDisplay}`;
-    })
+    });
+
+    let rewardBal = await cObj.methods.getUserEstimatedRewards(currentAddress).call();
+
+    document.getElementById("user-reward-balance-value").innerHTML = `Reward: ${rewardBal / 10 ** 18} ${SELECT_CONTRACT[_NETWORK_ID].TOKEN.symbol}`;
+
+    let balMainUser = currentAddress ? await oContractToken.methods.balanceOf(currentAddress).call() : "";
+    balMainUser = Number(balMainUser) / 10 ** 18;
+
+    document.getElementById("user-token-value").innerHTML = `Balance: ${balMainUser} ${SELECT_CONTRACT[_NETWORK_ID].TOKEN.symbol}`;
+
+    let currentDate = new Date().getTime();
+
+    if(isStakingPaused) {
+      isStakingPausedText = "Paused";
+    } else if(currentDate < startDate) {
+      isStakingPausedText = "Locked";
+    } else if(currentDate > endDate) {
+      isStakingPausedText = "Ended";
+    } else {
+      isStakingPausedText = "Active";
+    }
+
+    document.querySelectorAll(".active-status-staking").forEach((element) => {
+      element.innerHTML = `${isStakingPausedText}`;
+    });
+
+    if(currentDate > startDate && currentDate < endDate) {
+      const ele = document.getElementById("countdown-time-value");
+      generateCountdown(ele, endDate);
+
+      document.getElementById("countdown-title-value").innerHTML = "Staking Ends In";
+    }
   } catch (error) {
     
   }
