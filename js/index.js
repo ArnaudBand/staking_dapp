@@ -164,3 +164,19 @@ function generateCountdown(ele, claimDate) {
     }
   }, 1000);
 }
+
+async function connectMe(_provider) {
+  try {
+    let _comn_res = await commonProviderDetector(_provider);
+    console.log("connectMe", _comn_res);
+    if (!_comn_res) {
+      notyf.error("Please install metamask wallet");
+      return;
+    } else {
+      let sClass = getSelectedTab();
+      console.log("connectMe", sClass);
+    }
+  } catch (error) {
+    notyf.error(error.message);
+  }
+}
