@@ -123,8 +123,22 @@ const loadInitialData = async (sClass) => {
       generateCountdown(ele, endDate);
 
       document.getElementById("countdown-title-value").innerHTML = "Staking Ends In";
+
+      if(currentDate < startDate) {
+        const ele = document.getElementById("countdown-time-value");
+        generateCountdown(ele, startDate);
+
+        document.getElementById("countdown-title-value").innerHTML = "Staking Starts In";
+      }
+
+      document.querySelectorAll(".apy-value").forEach((element) => {
+        element.innerHTML = `${cApy}%`;
+      });
     }
   } catch (error) {
-    
+    console.lclearog("loadInitialData", error);
+    notyf.error(
+      `Unable to fetch data from ${SELECT_CONTRACT[_NETWORK_ID].STAKING[sClass].name}!\n Please try again later.`
+    )
   }
 }
