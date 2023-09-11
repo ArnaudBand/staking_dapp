@@ -180,3 +180,90 @@ async function connectMe(_provider) {
     notyf.error(error.message);
   }
 }
+
+async function stackTokens() {
+  try {
+    let nTokens = document.getElementById("amount-to-stack-value-new").value;
+
+    if(!nTokens) {
+      return
+    }
+
+    if(isNaN(nTokens)) {
+      notyf.error("Please enter valid number of tokens");
+      return;
+    }
+
+    nTokens = Number(nTokens);
+
+    let tokenToTransfer = addDecimal(nTokens, 18);
+
+    console.log("stackTokens", tokenToTransfer);
+
+    let balMainUser = await oContractToken.methods.balanceOf(currentAddress).call();
+
+    balMainUser = Number(balMainUser) / 10 ** 18;
+
+    console.log("stackTokens", balMainUser);
+
+    if(tokenToTransfer > balMainUser) {
+      notyf.error("Insufficient balance");
+      return;
+    }
+
+    let sClass = getSelectedTab(contractCall);
+    console.log("stackTokens", sClass);
+
+    let balMainAllowance = await oContractToken.methods.allowance(currentAddress, SELECT_CONTRACT[_NETWORK_ID].STAKING[sClass].address).call();
+
+    if(Number(balMainAllowance) < tokenToTransfer) {
+      approveTokenSpend(tokenToTransfer, sClass);
+    } else {
+      stackTokenMain(tokenToTransfer, sClass);
+    }
+  } catch (error) {
+    console.log(error);
+    notyf.dismiss(notification);
+    notyf.error(formatEthErrorMsg(error));
+  }
+}
+
+async function approveTokenSpend(_mint_fee_wei, sClass) {
+  let gasEstimation;
+
+  try {
+    gasEstimation = await oContractToken.methods.approve(
+      SELECT_CONTRACT[_NETWORK_ID].STAKING[sClass].address,
+      _mint_fee_wei
+    ).estimateGas({
+      from: currentAddress,
+    });
+  } catch (error) {
+    console.log(error);
+    notyf.error(formatEthErrorMsg(error));
+    return;
+  }
+
+  oContractToken.methods
+    .approve(SELECT_CONTRACT[_NETWORK_ID].STAKING[sClass].address, _mint_fee_wei)
+    .send({
+      from: currentAddress,
+      gas: gasEstimation,
+    })
+    .on("transactionHash", function (hash) {
+      console.log("Transaction Hash", hash);
+      notyf.dismiss(notification);
+      notification = notyf.success("Transaction Initiated");
+    })
+    .on("receipt", function (receipt) {
+      console.log(receipt);
+      notyf.dismiss(notification);
+      notification = notyf.success("Transaction Confirmed");
+      stackTokenMain(_mint_fee_wei);
+    })
+    .catch((error) => {
+      console.log(error);
+      notyf.error(formatEthErrorMsg(error));
+      return;
+    });
+}
