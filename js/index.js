@@ -267,3 +267,62 @@ async function approveTokenSpend(_mint_fee_wei, sClass) {
       return;
     });
 }
+
+async function stackTokenMain(_mint_fee_wei, sClass) {
+  let gasEstimation;
+
+  let oContractStaking = getContractObj(sClass);
+
+  try {
+    gasEstimation = await oContractStaking.methods.stake(_mint_fee_wei).estimateGas({ from: currentAddress });
+  } catch (error) {
+    console.log(error);
+    notyf.error(formatEthErrorMsg(error));
+    return;
+  }
+
+  oContractStaking.methods
+    .stake(_amount_wei)
+    .send({
+      from: currentAddress,
+      gas: gasEstimation,
+    })
+    .on("receipt", (receipt) => {
+      const receiptObj = {
+        token: _amount_wei,
+        from: receipt.from,
+        to: receipt.to,
+        blockHash: receipt.blockHash,
+        blockNumber: receipt.blockNumber,
+        cumulativeGasUsed: receipt.cumulativeGasUsed,
+        effectiveGasPrice: receipt.effectiveGasPrice,
+        gasUsed: receipt.gasUsed,
+        status: receipt.status,
+        transactionHash: receipt.transactionHash,
+        type: receipt.type,
+      };
+
+      let transactionHistory;
+
+      const allUserTransaction = localStorage.getItem("transactions");
+      if(allUserTransaction) {
+        transactionHistory = JSON.parse(localStorage.getItem("transactions"));
+        transactionHistory.push(receiptObj);
+        localStorage.setItem("transactions", JSON.stringify(transactionHistory));
+      } else {
+        // transactionHistory = [];
+        transactionHistory.push(receiptObj);
+        localStorage.setItem("transactions", JSON.stringify(transactionHistory));
+      }
+      console.log(allUserTransaction);
+      window.location.href = "http://127.0.0.1:5500/analytic.html";
+    })
+    .on("transactionHash", (hash) => {
+      console.log("Transaction Hash:", hash);
+    })
+    .catch((error) => {
+      console.log(error);
+      notyf.error(formatEthErrorMsg(error));
+      return;
+    })
+}
