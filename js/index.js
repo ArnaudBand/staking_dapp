@@ -326,3 +326,37 @@ async function stackTokenMain(_mint_fee_wei, sClass) {
       return;
     })
 }
+
+const unstakeTokens = async () => {
+  try {
+    let nTokens = document.getElementById("amount-to-unstack-value").value;
+
+    if(!nTokens) return;
+
+    if(isNaN(nTokens) || nTokens === 0 || Number(nTokens) < 0) {
+      notyf.error("Please enter valid number of tokens");
+      return;
+    }
+
+    nTokens = Number(nTokens);
+
+    let tokenToTransfer = addDecimal(nTokens, 18);
+    let sClass = getSelectedTab(contractCall);
+    let oContractStaking = getContractObj(sClass);
+
+    let balMainUser = await oContractStaking.methods.getUser(currentAddress).call();
+
+    balMainUser = Number(balMainUser.stakedAmount) / 10 ** 18;
+
+    if(balMainUser < nTokens) {
+      notyf.error("Insufficient balance");
+      return; 
+    }
+
+    unstackTokenMain(tokenToTransfer, oContractStaking, sClass);
+  } catch (error) {
+    console.log(error);
+    notyf.dismiss(notification);
+    notyf.error(formatEthErrorMsg(error));
+  }
+}
