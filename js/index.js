@@ -441,3 +441,60 @@ const claimTokens = async () => {
     notyf.error(formatEthErrorMsg(error));
   }
 }
+
+const claimTokensMain = async (oContractStaking, sClass) => {
+  let gasEstimation;
+
+  try {
+    gasEstimation = await oContractStaking.methods.claimReward().estimateGas({ from: currentAddress });
+    console.log("gasEstimation:", gasEstimation);
+  } catch (error) {
+    console.log(error);
+    notyf.error(formatEthErrorMsg(error));
+    return;
+  }
+
+  oContractStaking.methods
+    .claimReward()
+    .send({
+      from: currentAddress,
+      gas: gasEstimation,
+    })
+    .on("receipt", (receipt) => {
+      console.log(receipt);
+      const receiptObj = {
+        token: _amount_wei,
+        from: receipt.from,
+        to: receipt.to,
+        blockHash: receipt.blockHash,
+        blockNumber: receipt.blockNumber,
+        cumulativeGasUsed: receipt.cumulativeGasUsed,
+        effectiveGasPrice: receipt.effectiveGasPrice,
+        gasUsed: receipt.gasUsed,
+        status: receipt.status,
+        transactionHash: receipt.transactionHash,
+        type: receipt.type,
+      };
+
+      let transactionHistory = [];
+
+      const allUserTransaction = localStorage.getItem("transactions");
+      if(allUserTransaction) {
+        transactionHistory = JSON.parse(localStorage.getItem("transactions"));
+        transactionHistory.push(receiptObj);
+        localStorage.setItem("transactions", JSON.stringify(transactionHistory));
+      } else {
+        transactionHistory.push(receiptObj);
+        localStorage.setItem("transactions", JSON.stringify(transactionHistory));
+      }
+      window.location.href = "http://127.0.0.1:5500/analytic.html";
+    })
+    .on("transactionHash", (hash) => {
+      console.log("Transaction Hash:", hash);
+    })
+    .catch((error) => {
+      console.log(error);
+      notyf.error(formatEthErrorMsg(error));
+      return;
+    });
+}
