@@ -415,4 +415,29 @@ const unstackTokenMain = async (_amount_wei, oContractStaking, sClass) => {
       notyf.error(formatEthErrorMsg(error));
       return;
     });
+};
+
+const claimTokens = async () => {
+  try {
+    let sClass = getSelectedTab(contractCall);
+    let oContractStaking = getContractObj(sClass);
+
+    let rewardBal = await oContractStaking.methods
+                            .getUserEstimatedRewards()
+                            .call({ from: currentAddress });
+    rewardBal = Number(rewardBal);
+    console.log("RewardBal:", rewardBal);
+
+    if(!rewardBal) {
+      notyf.dismiss(notification);
+      notyf.error("No rewards to claim");
+      return;
+    }
+
+    claimTokensMain(oContractStaking, sClass);
+  } catch (error) {
+    console.log(error);
+    notyf.dismiss(notification);
+    notyf.error(formatEthErrorMsg(error));
+  }
 }
