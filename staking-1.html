@@ -1,90 +1,109 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@theblockchaincoders - ERC20 Token staking Dapp</title>
-    <link rel="icon" href="./assets/img/favicon.png" />
-    <link rel="stylesheet" type="text/css" href="./assets/vendor/notyf/notyf.min.css" />
-    <link rel="stylesheet" href="./assets/css/style.css" />
-  </head>
-  <body>
-    <!-- PRELOADER -->
-    <div id="gameon-preloader" class="gameon-preloader">
-      <div class="preloader-animation">
-        <div class="spinner"></div>
-        <p class="fw-5 text-center text-uppercase">Loading</p>
-      </div>
-      <div class="loader-animation">
-        <div class="row h-100">
-          <!-- SINGLE-LOADER -->
-          <div class="col-3 single-loader p-0">
-            <div class="loader-bg"></div>
-          </div>
-          <!-- SINGLE-LOADER -->
-          <div class="col-3 single-loader p-0">
-            <div class="loader-bg"></div>
-          </div>
-          <!-- SINGLE-LOADER -->
-          <div class="col-3 single-loader p-0">
-            <div class="loader-bg"></div>
-          </div>
-          <!-- SINGLE-LOADER -->
-          <div class="col-3 single-loader p-0">
-            <div class="loader-bg"></div>
-          </div>
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>@theblockchaincoders - ERC20 Token staking Dapp</title>
+  <link rel="icon" href="./assets/img/favicon.png" />
+  <link rel="stylesheet" type="text/css" href="./assets/vendor/notyf/notyf.min.css" />
+  <link rel="stylesheet" href="./assets/css/style.css" />
+</head>
+
+<body>
+  <!-- PRELOADER -->
+  <div id="gameon-preloader" class="gameon-preloader">
+    <div class="preloader-animation">
+      <div class="spinner"></div>
+      <p class="fw-5 text-center text-uppercase">Loading</p>
+    </div>
+    <div class="loader-animation">
+      <div class="row h-100">
+        <!-- SINGLE-LOADER -->
+        <div class="col-3 single-loader p-0">
+          <div class="loader-bg"></div>
+        </div>
+        <!-- SINGLE-LOADER -->
+        <div class="col-3 single-loader p-0">
+          <div class="loader-bg"></div>
+        </div>
+        <!-- SINGLE-LOADER -->
+        <div class="col-3 single-loader p-0">
+          <div class="loader-bg"></div>
+        </div>
+        <!-- SINGLE-LOADER -->
+        <div class="col-3 single-loader p-0">
+          <div class="loader-bg"></div>
         </div>
       </div>
     </div>
-    <!--PRELOADER END-->
+  </div>
+  <!--PRELOADER END-->
 
-    <!-- MAIN START -->
-    <div class="main">
-      <header id="header">
-        <nav data-aos="zoom-out" data-aos-delay="800" class="navbar gameon-navbar navbar-expand">
-          <div class="container header">
-            <a href="index.html" class="navbar-brand">
-              <img src="./assets/img/logo/logo.png" alt="Brand Logo" />
-            </a>
+  <!-- MAIN START -->
+  <div class="main">
+    <header id="header">
+      <nav data-aos="zoom-out" data-aos-delay="800" class="navbar gameon-navbar navbar-expand">
+        <div class="container header">
+          <a href="index.html" class="navbar-brand">
+            <img src="./assets/img/logo/logo.png" alt="Brand Logo" />
+          </a>
 
-            <div class="ml-auto"></div>
-            <ul class="navbar-nav items mx-auto">
-              <li class="nav-item active">
-                <a href="index.html" class="nav-link active">Home</a>
-              </li>
-              <li class="nav-item">
-                <a href="project-2.html" class="nav-link">Project</a>
-              </li>
-              <li class="nav-item">
-                <a href="staking-1.html" class="nav-link">Staking</a>
-              </li>
-              <li class="nav-item">
-                <a href="contact.html" class="nav-link">Contact</a>
-              </li>
-              <li class="nav-item">
-                <a href="register.html" class="nav-link">Initialize</a>
-              </li>
-              <li class="nav-item">
-                <a href="analytic.html" class="nav-link">Profile</a>
-              </li>
-            </ul>
-          </div>
-        </nav>
-      </header>
-    </div>
-    <!-- MAIN END -->
+          <div class="ml-auto"></div>
+          <ul class="navbar-nav items mx-auto">
+            <li class="nav-item active">
+              <a href="index.html" class="nav-link active">Home</a>
+            </li>
+            <li class="nav-item">
+              <a href="project-2.html" class="nav-link">Project</a>
+            </li>
+            <li class="nav-item">
+              <a href="staking-1.html" class="nav-link">Staking</a>
+            </li>
+            <li class="nav-item">
+              <a href="contact.html" class="nav-link">Contact</a>
+            </li>
+            <li class="nav-item">
+              <a href="register.html" class="nav-link">Initialize</a>
+            </li>
+            <li class="nav-item">
+              <a href="analytic.html" class="nav-link">Profile</a>
+            </li>
+          </ul>
+          <!-- NAVBAR-SEARCH -->
+          <ul class="navbar-nav icons">
+            <li class="nav-item">
+              <a href="#" class="nav-link" data-toggle="modal" data-target="#search">
+                <i class="icon-magnifier"></i>
+              </a>
+            </li>
+          </ul>
+          <!-- NAVBAR-MENU -->
+          <ul class="navbar-nav toggle">
+            <li class="nav-item">
+              <a href="#" class="nav-link" data-toggle="modal" data-target="#menu">
+                <i class="icon-menu m-0"></i>
+              </a>
+            </li>
+          </ul>
+        </div>
+      </nav>
+    </header>
+  </div>
+  <!-- MAIN END -->
 
-    <!-- SCRIPT -->
+  <!-- SCRIPT -->
 
-    <script src="./assets/js/vendor/jquery.min.js"></script>
-    <script src="./assets/js/vendor/popper.min.js"></script>
-    <script src="./assets/js/vendor/bootstrap.min.js"></script>
-    <script src="./assets/js/vendor/all.min.js"></script>
-    <script src="./assets/js/vendor/gallery.min.js"></script>
-    <script src="./assets/js/vendor/slider.min.js"></script>
-    <script src="./assets/js/vendor/countdown.min.js"></script>
-    <script src="./assets/js/vendor/shuffle.min.js"></script>
-    <script src="./assets/js/main.js"></script>
-    <script src="./assets/vendor/notyf/notyf.min.js"></script>
-  </body>
+  <script src="./assets/js/vendor/jquery.min.js"></script>
+  <script src="./assets/js/vendor/popper.min.js"></script>
+  <script src="./assets/js/vendor/bootstrap.min.js"></script>
+  <script src="./assets/js/vendor/all.min.js"></script>
+  <script src="./assets/js/vendor/gallery.min.js"></script>
+  <script src="./assets/js/vendor/slider.min.js"></script>
+  <script src="./assets/js/vendor/countdown.min.js"></script>
+  <script src="./assets/js/vendor/shuffle.min.js"></script>
+  <script src="./assets/js/main.js"></script>
+  <script src="./assets/vendor/notyf/notyf.min.js"></script>
+</body>
+
 </html>
