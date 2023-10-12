@@ -336,13 +336,55 @@
                   </div>
                   <span class="btn input-btn mt-2 mt-md-0 ml-md-3" onclick="stackTokens()">Stack</span>
                 </div>
-              </div>
-              <div class="input-area d-flex flex-column flex-md-row mb-3">
-                <div class="input-text">
-                  <input type="text" id="amout-to-unstack-value" placeholder="0.00">
-                  <a href="">Max</a>
+                <div class="input-area d-flex flex-column flex-md-row mb-3">
+                  <div class="input-text">
+                    <input type="text" id="amout-to-unstack-value" placeholder="0.00">
+                    <a href="">Max</a>
+                  </div>
+                  <span class="btn input-btn mt-2 mt-md-0 ml-md-3" onclick="unstackTokens()">Withdraw</span>
                 </div>
-                <span class="btn input-btn mt-2 mt-md-0 ml-md-3" onclick="unstackTokens()">Withdraw</span>
+                <div class="input-area d-flex flex-column flex-md-row mb-3">
+                  <div class="input-text">
+                    <input type="text" id="user-reward-balance-value" placeholder="0.00">
+                    <a href="">Max</a>
+                  </div>
+                  <span class="btn input-btn mt-2 mt-md-0 ml-md-3" onclick="claimTokens()">Rewards</span>
+                </div>
+              </div>
+
+              <!-- DETAILS -->
+
+              <span>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Sit ut soluta ea aut! Ipsa, nostrum.</span>
+              <span class="mt-3">
+                <strong>*APY is dynamic</strong>
+              </span>
+            </div>
+          </div>
+
+          <!-- SIDEBAR -->
+          <div class="col-12 col-md-5">
+            <div class="staking-items mt-4 mt-md-0">
+              <!-- CARD -->
+              <div class="card no-hover staking-card">
+                <h3 id="total-locked-tokens-value" class="m-0">1000 TBC</h3>
+                <p>Total Value Locked</p>
+              </div>
+              <div class="card no-hover staking-card my-4">
+                <h3 id="total-locked-user-token" class="m-0">1000 TBC</h3>
+                <p>Your Lock Token</p>
+              </div>
+              <div class="card no-hover staking-card my-4">
+                <h3 id="apy-value-feature" class="m-0">20%</h3>
+                <p>APY</p>
+              </div>
+              <div class="card no-hover staking-card my-4">
+                <h3 id="num-of-stackers-value" class="m-0">34</h3>
+                <p>Number of Stackers</p>
+              </div>
+              <div class="card no-hover staking-card my-4">
+                <h3 id="countdown-tim-value" class="m-0">1h: 02min: 35sec</h3>
+                <span id="countdown-title-value"></span>
+                <p>Time left, Hurry Up</p>
               </div>
             </div>
           </div>
