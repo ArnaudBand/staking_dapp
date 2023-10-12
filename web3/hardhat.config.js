@@ -3,15 +3,15 @@ require("dotenv").config();
 
 /** @type import('hardhat/config').HardhatUserConfig */
 const PRIVATE_KEY = process.env.PRIVATE_KEY;
-const RPC_URL = "https://rpc.ankr.com/mumbai";
+const RPC_URL = "https://rpc-mumbai.maticvigil.com/";
 module.exports = {
-  defaultNetwork: "mumbai",
+  defaultNetwork: "Polygon Mumbai",
   networks: {
     hardhat: {
       chainId: 80001,
     },
-    mumbai: {
-      url: "https://rpc.ankr.com/mumbai",
+    polygon_mumbai: {
+      url: "https://rpc-mumbai.maticvigil.com/",
       accounts: [`0x${PRIVATE_KEY}`],
     },
   },
