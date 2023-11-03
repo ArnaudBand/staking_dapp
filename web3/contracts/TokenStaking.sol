@@ -31,7 +31,7 @@ contract TokenStaking is Ownable, ReentrancyGuard, Initializable {
   address private _tokenAddress;
 
   // APY
-  uint256 _apyRate;
+  uint256 public _apyRate;
   uint256 public constant PERCENTAGE_DENOMINATOR = 10000;
   uint256 public constant APY_RATE_CHANGE_THRESHOLD = 10;
 
