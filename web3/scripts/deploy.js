@@ -11,7 +11,7 @@ async function main() {
   await theblockchaincoders.waitForDeployment();
   
   // CONTRACT ADDRESS
-  console.log(` STACKING: ${tokenStaking.target}`);
+  console.log(` STAKING: ${tokenStaking.target}`);
   console.log(` TOKEN: ${theblockchaincoders.target}`);
 }
 
